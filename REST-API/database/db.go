@@ -29,7 +29,7 @@ func StartMongoDB() error {
 
 	// Send a ping to confirm a successful connection
 	if err := MongoClient.Database("admin").RunCommand(context.TODO(), bson.D{{"ping", 1}}).Err(); err != nil {
-		panic(err)
+		return err
 	}
 	log.Println("Pinged your deployment. You successfully connected to MongoDB!")
 	
