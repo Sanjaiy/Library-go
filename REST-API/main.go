@@ -4,6 +4,8 @@ import (
 	"os"
 
 	"github.com/Sanjaiy/Library-go/rest-api/database"
+	"github.com/Sanjaiy/Library-go/rest-api/handlers"
+	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -51,4 +53,22 @@ func initApp() error {
 	}
 
 	return nil
+}
+
+
+func generateApp() *fiber.App {
+	app := fiber.New()
+
+	// create health check route
+	app.Get("/health", func (c *fiber.Ctx) error {
+		return c.SendString("OK")
+	})
+
+	// create the library groups and routes
+	libGroup := app.Group("/library")
+	libGroup.Get("/", handlers.GetLibraries)
+	libGroup.Post("/", handlers.CreateLibrary)
+	libGroup.Post("/:id/book", handlers.CreateBook)
+	libGroup.Delete("/:id", handlers.DeleteLibrary)
+	return app
 }
